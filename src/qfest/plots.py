@@ -191,6 +191,7 @@ def load_observable_series(result_names, observable_name="Mzz"):
         if times is None:
             times = result["t"]
 
-        series[name] = result["observables"][observable_name]
+        label = result.get("method", name)
+        series[label] = result["observables"][observable_name]
 
     return times, series
