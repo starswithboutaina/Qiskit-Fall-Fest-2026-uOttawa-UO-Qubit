@@ -29,7 +29,7 @@ def exponential(lams, vals, asymptote=None):
         f = lambda x, a, b: a * np.exp(-b * x) + asymptote
         p, _ = curve_fit(f, lams, vals, p0=[vals[0] - asymptote, 0.3], maxfev=10000)
         return float(f(0.0, *p))
-    except (RuntimeError, ValueError):
+    except (RuntimeError, ValueError, TypeError):
         return linear(lams, vals)
 
 
