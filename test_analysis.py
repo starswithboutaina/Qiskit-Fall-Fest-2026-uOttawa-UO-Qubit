@@ -28,3 +28,10 @@ def test_validate_results_rejects_missing_field():
 
     with pytest.raises(ValueError):
         validate_results(data)
+
+def test_validate_results_rejects_missing_counts_mag():
+    data = make_valid_result()
+    del data["aer_counts_mag"]
+
+    with pytest.raises(ValueError):
+        validate_results(data)
