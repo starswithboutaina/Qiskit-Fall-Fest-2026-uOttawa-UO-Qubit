@@ -19,6 +19,7 @@ def validate_results(data):
         "exact_magnetization",
         "aer_expectations",
         "zne_aer",
+        "aer_counts_mag",
         "analysis",
     ]
 

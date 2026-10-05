@@ -11,6 +11,7 @@ def make_valid_result():
         "zne_aer": {
             "mitigated": 0.945
         },
+        "aer_counts_mag": 0.96,
         "analysis": {}
     }
 
