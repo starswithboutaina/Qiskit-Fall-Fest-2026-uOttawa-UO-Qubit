@@ -1,29 +1,29 @@
-"""Local noise models for TFIM simulation.
+"""Configurable Aer noise models, aligned with the qfest-plots interface."""
 
-The upstream qfest-plots source was unavailable. ``simple_model`` therefore
-uses the project's pre-existing 1%/3% depolarizing-noise demo parameters.
-"""
-
-from qiskit_aer.noise import NoiseModel, depolarizing_error
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel, ReadoutError, depolarizing_error
 
 
-def simple_model() -> NoiseModel:
-    """Return a nontrivial depolarizing model for common IBM basis gates."""
-    model = NoiseModel()
-    model.add_all_qubit_quantum_error(
-        depolarizing_error(0.01, 1), ["id", "rz", "sx", "x", "h", "rx"]
+def from_backend(backend):
+    """Create an Aer simulator using a backend's noise characteristics."""
+    return AerSimulator.from_backend(backend)
+
+
+def simple_model(p1q=4e-4, p2q=3e-3, p_meas=3e-3):
+    """Build depolarizing and readout noise for logical and IBM basis gates."""
+    noise_model = NoiseModel()
+    one_qubit_error = depolarizing_error(p1q, 1)
+    two_qubit_error = depolarizing_error(p2q, 2)
+    readout_error = ReadoutError([
+        [1 - p_meas, p_meas],
+        [p_meas, 1 - p_meas],
+    ])
+
+    noise_model.add_all_qubit_quantum_error(
+        one_qubit_error, ["h", "x", "rx", "sx", "rz"]
     )
-    model.add_all_qubit_quantum_error(
-        depolarizing_error(0.03, 2), ["cx", "cz", "ecr", "rzz"]
+    noise_model.add_all_qubit_quantum_error(
+        two_qubit_error, ["cx", "cz", "ecr"]
     )
-    return model
-
-
-def from_backend(backend) -> NoiseModel:
-    """Build an Aer noise model from a backend's calibrated properties."""
-    from qiskit_aer import AerSimulator
-
-    model = AerSimulator.from_backend(backend).options.noise_model
-    if model is None or not model.to_dict().get("errors"):
-        raise ValueError("backend did not provide a nontrivial noise model")
-    return model
+    noise_model.add_all_qubit_readout_error(readout_error)
+    return noise_model

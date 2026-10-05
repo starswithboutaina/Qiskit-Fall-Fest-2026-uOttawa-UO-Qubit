@@ -614,11 +614,8 @@ def _get_aer_simulator(fake_backend, noise_mode: str):
     if noise_mode == "backend":
         if fake_backend is None:
             raise ValueError("--noise-model backend requires --fake-backend")
-        noise_model = from_backend(fake_backend)
-    elif noise_mode == "simple":
-        noise_model = simple_model()
-    else:
-        noise_model = NoiseModel()
+        return from_backend(fake_backend)
+    noise_model = simple_model() if noise_mode == "simple" else NoiseModel()
     if fake_backend is not None:
         return AerSimulator.from_backend(fake_backend, noise_model=noise_model)
     return AerSimulator(noise_model=noise_model)

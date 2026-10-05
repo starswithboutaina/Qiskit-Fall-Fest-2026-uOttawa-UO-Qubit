@@ -80,7 +80,7 @@ Regenerate these plots with:
 python hardware.py --n 6 --steps 20 --dt 0.05 --fake-backend ibm_marrakesh --noise simple --outdir results_canonical
 ```
 
-The local `simple` noise model uses the project's 1% single-qubit and 3% two-qubit depolarizing rates.
+The `simple` noise model uses 0.04% one-qubit depolarizing error, 0.3% two-qubit depolarizing error, and 0.3% readout error.
 
 ## 📝 License
 This project is developed for the Qiskit Fall Fest 2026.
