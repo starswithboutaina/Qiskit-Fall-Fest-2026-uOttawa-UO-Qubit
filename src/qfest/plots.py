@@ -9,8 +9,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from qfest.results import load
-
 FIG_DIR = Path("results/figs")
 FIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -163,35 +161,146 @@ def plot_swap_overhead(
 
     return save_path
 
-def load_observable_series(result_names, observable_name="Mzz"):
+def load_canonical_results(filename="results_canonical/tfim_results.json"):
     """
-    Load multiple result JSON files and extract one observable from each.
+    Load the canonical TFIM results JSON file.
+    """
+    import json
 
-    Parameters
-    ----------
-    result_names : sequence
-        Result file names without the .json extension.
-    observable_name : str
-        Observable to extract, such as "Mz", "Mx", or "Mzz".
+    with open(filename, "r", encoding="utf-8") as file:
+        return json.load(file)
 
-    Returns
-    -------
-    times : list
-        Shared time points.
-    series : dict
-        Mapping from result name to observable values.
+
+def plot_depth_vs_optimization(
+    data,
+    filename="depth_vs_optimization.png",
+):
+    """
+    Plot circuit depth versus Qiskit optimization level.
     """
 
-    series = {}
-    times = None
+    rows = data["transpilation"]
 
-    for name in result_names:
-        result = load(name)
+    levels = [row["optimization_level"] for row in rows]
+    depths = [row["depth"] for row in rows]
 
-        if times is None:
-            times = result["t"]
+    plt.figure()
 
-        label = result.get("method", name)
-        series[label] = result["observables"][observable_name]
+    plt.plot(
+        levels,
+        depths,
+        marker="o",
+    )
 
-    return times, series
+    plt.xlabel("Optimization Level")
+    plt.ylabel("Circuit Depth")
+    plt.title("Circuit Depth vs Optimization Level")
+
+    plt.xticks(levels)
+    plt.grid(True)
+    plt.tight_layout()
+
+    save_path = FIG_DIR / filename
+    plt.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    plt.show()
+
+    return save_path
+
+def plot_error_vs_optimization(
+    data,
+    filename="error_vs_optimization.png",
+):
+    """
+    Plot absolute error versus Qiskit optimization level.
+    """
+
+    rows = [
+        row
+        for row in data["analysis"]["table"]
+        if isinstance(row["optimization_level"], int)
+    ]
+
+    levels = [row["optimization_level"] for row in rows]
+    errors = [row["abs_error"] for row in rows]
+
+    plt.figure()
+
+    plt.plot(
+        levels,
+        errors,
+        marker="o",
+    )
+
+    plt.xlabel("Optimization Level")
+    plt.ylabel("Absolute Error")
+    plt.title("Absolute Error vs Optimization Level")
+
+    plt.xticks(levels)
+    plt.grid(True)
+    plt.tight_layout()
+
+    save_path = FIG_DIR / filename
+    plt.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    plt.show()
+
+    return save_path
+
+def plot_zne_comparison(
+    data,
+    filename="zne_comparison.png",
+):
+    """
+    Plot noisy ZNE samples together with mitigated and exact values.
+    """
+
+    zne = data["zne_aer"]
+
+    noise_factors = zne["noise_factors"]
+    raw_values = zne["raw"]
+    mitigated = zne["mitigated"]
+    exact = data["exact_magnetization"]
+
+    plt.figure()
+
+    plt.plot(
+        noise_factors,
+        raw_values,
+        marker="o",
+        label="Raw",
+    )
+
+    plt.axhline(
+        mitigated,
+        linestyle="--",
+        label="ZNE Mitigated",
+    )
+
+    plt.axhline(
+        exact,
+        linestyle=":",
+        label="Exact",
+    )
+
+    plt.xlabel("Noise Factor")
+    plt.ylabel("Magnetization")
+    plt.title("Zero-Noise Extrapolation Comparison")
+
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+
+    save_path = FIG_DIR / filename
+    plt.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    plt.show()
+
+    return save_path
+
+if __name__ == "__main__":
+    data = load_canonical_results()
+
+    plot_depth_vs_optimization(data)
+    plot_error_vs_optimization(data)
+    plot_zne_comparison(data)
