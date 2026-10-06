@@ -1,6 +1,6 @@
 {
   "experiment": "canonical_tfim_extrapolator_comparison",
-  "backend": "ibm_marrakesh",
+  "backend": "",
   "params": {
     "n": 6,
     "J": 1.0,
@@ -11,9 +11,9 @@
     "trotter_order": 2,
     "periodic": true,
     "protocol": "quench",
-    "backend": "ibm_marrakesh",
+    "backend": "",
     "no_hardware": true,
-    "outdir": "results_canonical",
+    "outdir": "results",
     "init_plus": false
   },
   "method": "linear_vs_richardson_vs_exponential",
@@ -22,18 +22,18 @@
     "signed_magnetization": {
       "exact": 0.8680534952109827,
       "raw": [
-        0.44873046875,
-        0.14794921874999997,
-        0.04174804687500001
+        0.8687176267948273,
+        0.86871762679486,
+        0.8687176267948951
       ],
       "noise_factors": [
         1.0,
         3.0,
         5.0
       ],
-      "linear": 0.5180460611979171,
-      "richardson": 0.672088623046875,
-      "exponential": 0.7662469042106932
+      "linear": 0.8687176267948108,
+      "richardson": 0.868717626794812,
+      "exponential": 0.868717626794824
     }
   },
   "extra": {
@@ -45,32 +45,32 @@
       5.0
     ],
     "raw_value": [
-      0.44873046875,
-      0.14794921874999997,
-      0.04174804687500001
+      0.8687176267948273,
+      0.86871762679486,
+      0.8687176267948951
     ],
     "exact_value": 0.8680534952109827,
     "estimates": {
-      "linear": 0.5180460611979171,
-      "richardson": 0.672088623046875,
-      "exponential": 0.7662469042106932
+      "linear": 0.8687176267948108,
+      "richardson": 0.868717626794812,
+      "exponential": 0.868717626794824
     },
     "absolute_error": {
-      "linear": 0.35000743401306567,
-      "richardson": 0.19596487216410774,
-      "exponential": 0.10180659100028955
+      "linear": 0.0006641315838280537,
+      "richardson": 0.000664131583829275,
+      "exponential": 0.0006641315838412654
     },
     "percent_deviation": {
-      "linear": 40.32095210076833,
-      "richardson": 22.57520685594129,
-      "exponential": 11.728147120189313
+      "linear": 0.07650814005035884,
+      "richardson": 0.07650814005049954,
+      "exponential": 0.07650814005188084
     },
     "rmse": {
-      "linear": 0.35000743401306567,
-      "richardson": 0.19596487216410774,
-      "exponential": 0.10180659100028955
+      "linear": 0.0006641315838280537,
+      "richardson": 0.000664131583829275,
+      "exponential": 0.0006641315838412654
     },
-    "best_extrapolator": "exponential",
-    "reference_linear_result": 0.5180460611979165
+    "best_extrapolator": "linear",
+    "reference_linear_result": 0.8687176267948097
   }
 }
