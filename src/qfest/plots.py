@@ -1,10 +1,15 @@
-"""Plotting from results/*.json.  (Owner: Toto)
+"""Plotting utilities for canonical TFIM and Iceberg results.
 
-TODO: error-vs-time (log scale), ED vs methods, discard-rate vs depth,
-SWAP overhead (all-to-all vs heavy-hex), summary table vs the previous report.
-Colour-blind-safe palette; label axes with units; one function per figure; save PNGs to results/figs/.
+Canonical TFIM plots currently include:
+- circuit depth vs optimization level
+- absolute error vs optimization level
+- ZNE comparison
+
+Iceberg observables must remain separately labeled until the team
+agrees on a shared magnetization convention.
 """
 
+import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -16,7 +21,7 @@ FIG_DIR.mkdir(parents=True, exist_ok=True)
 def plot_observable_vs_time(
     times,
     series,
-    observable_name="Mzz",
+    observable_name="M_zz",
     filename=None,
 ):
     """
@@ -43,6 +48,7 @@ def plot_observable_vs_time(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -50,7 +56,7 @@ def plot_observable_vs_time(
 def plot_error_vs_time(
     times,
     error_series,
-    observable_name="Mzz",
+    observable_name="M_zz",
     filename=None,
 ):
     """
@@ -78,6 +84,7 @@ def plot_error_vs_time(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -109,6 +116,7 @@ def plot_discard_rate_vs_depth(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -158,6 +166,7 @@ def plot_swap_overhead(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -165,7 +174,6 @@ def load_canonical_results(filename="results_canonical/tfim_results.json"):
     """
     Load the canonical TFIM results JSON file.
     """
-    import json
 
     with open(filename, "r", encoding="utf-8") as file:
         return json.load(file)
@@ -204,6 +212,7 @@ def plot_depth_vs_optimization(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -244,6 +253,7 @@ def plot_error_vs_optimization(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
@@ -284,7 +294,7 @@ def plot_zne_comparison(
     )
 
     plt.xlabel("Noise Factor")
-    plt.ylabel("Magnetization")
+    plt.ylabel("Signed M_z")
     plt.title("Zero-Noise Extrapolation Comparison")
 
     plt.legend()
@@ -295,6 +305,7 @@ def plot_zne_comparison(
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
 
     plt.show()
+    plt.close()
 
     return save_path
 
