@@ -1,0 +1,76 @@
+{
+  "experiment": "canonical_tfim_extrapolator_comparison",
+  "backend": "ibm_marrakesh",
+  "params": {
+    "n": 6,
+    "J": 1.0,
+    "h": 0.5,
+    "dt": 0.05,
+    "steps": 20,
+    "shots": 4096,
+    "trotter_order": 2,
+    "periodic": true,
+    "protocol": "quench",
+    "backend": "ibm_marrakesh",
+    "no_hardware": true,
+    "outdir": "results_canonical",
+    "init_plus": false
+  },
+  "method": "linear_vs_richardson_vs_exponential",
+  "t": 1.0,
+  "observables": {
+    "signed_magnetization": {
+      "exact": 0.8680534952109827,
+      "raw": [
+        0.44873046875,
+        0.14794921874999997,
+        0.04174804687500001
+      ],
+      "noise_factors": [
+        1.0,
+        3.0,
+        5.0
+      ],
+      "linear": 0.5180460611979171,
+      "richardson": 0.672088623046875,
+      "exponential": 0.7662469042106932
+    }
+  },
+  "extra": {
+    "source_file": "tfim_results",
+    "comparison_type": "single_endpoint",
+    "noise_factors": [
+      1.0,
+      3.0,
+      5.0
+    ],
+    "raw_value": [
+      0.44873046875,
+      0.14794921874999997,
+      0.04174804687500001
+    ],
+    "exact_value": 0.8680534952109827,
+    "estimates": {
+      "linear": 0.5180460611979171,
+      "richardson": 0.672088623046875,
+      "exponential": 0.7662469042106932
+    },
+    "absolute_error": {
+      "linear": 0.35000743401306567,
+      "richardson": 0.19596487216410774,
+      "exponential": 0.10180659100028955
+    },
+    "percent_deviation": {
+      "linear": 40.32095210076833,
+      "richardson": 22.57520685594129,
+      "exponential": 11.728147120189313
+    },
+    "rmse": {
+      "linear": 0.35000743401306567,
+      "richardson": 0.19596487216410774,
+      "exponential": 0.10180659100028955
+    },
+    "best_extrapolator": "exponential",
+    "reference_linear_result": 0.5180460611979165
+  }
+}

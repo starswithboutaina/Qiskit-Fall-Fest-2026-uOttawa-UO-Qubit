@@ -197,4 +197,55 @@ def test_extrapolator_comparison_selects_best_method():
     assert best in extrapolators
     assert results[best] == min(results.values())
 
-    
+def test_canonical_tfim_extrapolator_comparison():
+    """Compare ZNE extrapolators using the canonical TFIM endpoint data."""
+    from qfest.comparison import compare_canonical_tfim
+
+    result = compare_canonical_tfim("tfim_results")
+
+    # Check the exact signed magnetization.
+    assert result["extra"]["exact_value"] == pytest.approx(
+        0.8680534952109827
+    )
+
+    # Check the ZNE noise factors.
+    assert np.allclose(
+        result["extra"]["noise_factors"],
+        [1.0, 3.0, 5.0],
+    )
+
+    # Check the noisy measurements.
+    assert np.allclose(
+        result["extra"]["raw_value"],
+        [
+            0.44873046875,
+            0.14794921875,
+            0.041748046875,
+        ],
+    )
+
+    # Verify that our linear extrapolator reproduces
+    # the reference linear ZNE result.
+    assert result["extra"]["estimates"]["linear"] == pytest.approx(
+        result["extra"]["reference_linear_result"]
+    )
+
+    # Every extrapolator must produce finite numerical results.
+    for name in ("linear", "richardson", "exponential"):
+        assert np.isfinite(
+            result["extra"]["estimates"][name]
+        )
+
+        assert np.isfinite(
+            result["extra"]["rmse"][name]
+        )
+
+    # Exponential is the closest method for this canonical dataset.
+    assert result["extra"]["best_extrapolator"] == "exponential"
+
+    # Exponential extrapolation should improve upon linear ZNE.
+    assert (
+        result["extra"]["absolute_error"]["exponential"]
+        <
+        result["extra"]["absolute_error"]["linear"]
+    )
