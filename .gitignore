@@ -5,3 +5,4 @@ __pycache__/
 .env
 *.token
 results/figs/
+venv
